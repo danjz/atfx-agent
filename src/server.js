@@ -158,4 +158,7 @@ app.post("/api/instagram/prospect", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 ATFX Agent corriendo en puerto ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 ATFX Agent corriendo en puerto ${PORT}`);
+  console.log(`ANTHROPIC_API_KEY definida: ${!!process.env.ANTHROPIC_API_KEY}`);
+});
