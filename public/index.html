@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATFX Agente — Panel de pruebas</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+    .card { background: #fff; border-radius: 16px; box-shadow: 0 2px 16px rgba(0,0,0,0.08); width: 100%; max-width: 480px; overflow: hidden; }
+    .card-header { background: #1a1a2e; color: #fff; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 12px; }
+    .avatar { width: 40px; height: 40px; border-radius: 50%; background: #3a86ff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0; }
+    .header-info h3 { font-size: 15px; font-weight: 500; }
+    .header-info p { font-size: 12px; opacity: 0.7; }
+    .plat-row { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+    .plat-btn { padding: 4px 12px; border-radius: 20px; border: 1px solid #ddd; font-size: 12px; cursor: pointer; background: #fff; color: #555; }
+    .plat-btn.active { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+    .chat { height: 340px; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .msg { max-width: 78%; padding: 9px 13px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
+    .msg.agent { background: #f0f0f0; color: #222; align-self: flex-start; border-bottom-left-radius: 4px; }
+    .msg.user { background: #3a86ff; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .msg.loading { color: #999; font-style: italic; }
+    .input-row { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid #eee; }
+    .input-row input { flex: 1; padding: 9px 13px; border-radius: 20px; border: 1px solid #ddd; font-size: 14px; outline: none; }
+    .input-row input:focus { border-color: #3a86ff; }
+    .send-btn { width: 38px; height: 38px; border-radius: 50%; background: #3a86ff; border: none; color: #fff; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .reset { font-size: 11px; color: #aaa; cursor: pointer; margin-left: auto; padding: 4px 8px; background: none; border: none; }
+    .reset:hover { color: #666; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="card-header">
+    <div class="avatar">DB</div>
+    <div class="header-info">
+      <h3>Desarrolladora de Negocios — ATFX</h3>
+      <p>Broker multiregulado · CFD · Forex</p>
+    </div>
+  </div>
+  <div class="plat-row">
+    <button class="plat-btn active" onclick="setPlatform('Instagram', this)">📸 Instagram</button>
+    <button class="plat-btn" onclick="setPlatform('Facebook', this)">👤 Facebook</button>
+    <button class="plat-btn" onclick="setPlatform('LinkedIn', this)">💼 LinkedIn</button>
+    <button class="plat-btn" onclick="setPlatform('WhatsApp', this)">💬 WhatsApp</button>
+    <button class="reset" onclick="resetChat()">↺ reiniciar</button>
+  </div>
+  <div class="chat" id="chat"></div>
+  <div class="input-row">
+    <input type="text" id="inp" placeholder="Escribe como el prospecto..." onkeydown="if(event.key==='Enter') send()" />
+    <button class="send-btn" id="btn" onclick="send()">➤</button>
+  </div>
+</div>
+
+<script>
+let platform = 'Instagram';
+let history = [];
+let busy = false;
+
+const greetings = {
+  Instagram: '¡Hola! Vi tu perfil y me parece muy interesante tu contenido sobre trading 📈 Soy desarrolladora de negocios en ATFX. ¿Tienes un momento para contarte algo que podría interesarte?',
+  Facebook: '¡Hola! Te escribo porque vi que eres trader y tengo algo interesante que comentarte sobre ATFX. ¿Estás activo en los mercados actualmente?',
+  LinkedIn: 'Hola, vi tu perfil y me llamó la atención tu experiencia en mercados financieros. Soy desarrolladora de negocios en ATFX y me gustaría conectar contigo. ¿Tienes unos minutos?',
+  WhatsApp: '¡Hola! Te escribo de parte de ATFX. Vi tu interés en trading de CFD y quería presentarte algo que puede mejorar tus condiciones de operación. ¿Puedo contarte?'
+};
+
+function setPlatform(p, btn) {
+  platform = p;
+  document.querySelectorAll('.plat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  resetChat();
+}
+
+function resetChat() {
+  history = [];
+  document.getElementById('chat').innerHTML = '';
+  addMsg('agent', greetings[platform]);
+}
+
+function addMsg(role, text) {
+  const box = document.getElementById('chat');
+  const d = document.createElement('div');
+  d.className = 'msg ' + role;
+  d.textContent = text;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+  return d;
+}
+
+async function send() {
+  if (busy) return;
+  const inp = document.getElementById('inp');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  addMsg('user', text);
+  history.push({ role: 'user', content: text });
+  busy = true;
+  document.getElementById('btn').disabled = true;
+  const ld = addMsg('agent loading', 'escribiendo...');
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: history, platform })
+    });
+    const data = await res.json();
+    ld.remove();
+    const reply = data.reply || data.error || 'Sin respuesta';
+    addMsg('agent', reply);
+    history.push({ role: 'assistant', content: reply });
+  } catch (e) {
+    ld.remove();
+    addMsg('agent', 'Error de conexión con el servidor.');
+  }
+  busy = false;
+  document.getElementById('btn').disabled = false;
+  inp.focus();
+}
+
+resetChat();
+</script>
+</body>
+</html>
