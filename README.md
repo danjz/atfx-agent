@@ -1,6 +1,6 @@
-# Agente Trader
+# ATFX Agente Conversacional IA
 
-Agente de prospección conversacional que responde mensajes entrantes en Instagram, Facebook y WhatsApp Business usando la API de Claude.
+Agente de prospección para ATFX que responde mensajes entrantes en Instagram, Facebook y WhatsApp Business usando la API de Claude.
 
 ---
 
@@ -99,7 +99,7 @@ curl -X POST http://localhost:3000/api/instagram/prospect \
 ## Estructura del proyecto
 
 ```
-agente-trader/
+atfx-agent/
 ├── src/
 │   └── server.js          # Servidor principal
 ├── public/

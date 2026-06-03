@@ -1,7 +1,7 @@
 {
-  "name": "agente-trader",
+  "name": "atfx-agent",
   "version": "1.0.0",
-  "description": "Agente conversacional IA para prospección de traders",
+  "description": "Agente conversacional IA para prospección ATFX",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
