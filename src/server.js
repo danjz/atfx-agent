@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const client = new Anthropic();
 
 const SYSTEM_PROMPT = `Eres una desarrolladora de negocios de ATFX, un broker de CFD multiregulado. Hablas en primera persona, con un tono profesional pero cercano, como si chatearas por redes sociales. Tu objetivo es prospectar traders, academias de trading y influencers financieros para que operen con ATFX.
 
@@ -48,7 +48,7 @@ app.post("/api/chat", async (req, res) => {
 
   try {
     const response = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 1024,
       system: SYSTEM_PROMPT + `\n\nPlataforma actual: ${platform}.`,
       messages,
@@ -98,7 +98,7 @@ app.post("/webhook/meta", async (req, res) => {
 
       try {
         const response = await client.messages.create({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-4-6",
           max_tokens: 1024,
           system: SYSTEM_PROMPT + "\n\nPlataforma actual: Instagram/Facebook.",
           messages: metaConversations[senderId],
@@ -142,7 +142,7 @@ app.post("/api/instagram/prospect", async (req, res) => {
   // Genera el primer mensaje personalizado para ese prospecto
   try {
     const response = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 200,
       system: SYSTEM_PROMPT,
       messages: [{
