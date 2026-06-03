@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ATFX Agente — Panel de pruebas</title>
+  <title>Agent Trader</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: system-ui, sans-serif; background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
@@ -53,6 +53,10 @@
 </div>
 
 <script>
+const API_BASE = window.location.hostname === 'agent-trader-production-7244.up.railway.app'
+  ? ''
+  : 'https://agent-trader-production-7244.up.railway.app';
+
 let platform = 'Instagram';
 let history = [];
 let busy = false;
@@ -99,7 +103,7 @@ async function send() {
   document.getElementById('btn').disabled = true;
   const ld = addMsg('agent loading', 'escribiendo...');
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch(`${API_BASE}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: history, platform })
