@@ -43,12 +43,7 @@ INSTRUCCIONES DE COMPORTAMIENTO:
 
 // ─── Debug endpoint (temporal) ───────────────────────────────────────────────
 app.get("/debug-env", (req, res) => {
-  res.json({
-    CLAUDE_KEY: !!process.env.CLAUDE_KEY,
-    ANTHROPIC_API_KEY: !!process.env.ANTHROPIC_API_KEY,
-    PORT: process.env.PORT,
-    RAILWAY_SERVICE_NAME: process.env.RAILWAY_SERVICE_NAME
-  });
+  res.json(Object.keys(process.env));
 });
 
 // ─── Chat endpoint (usado por el widget y por los webhooks) ───────────────────
