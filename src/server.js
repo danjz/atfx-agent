@@ -40,6 +40,12 @@ INSTRUCCIONES DE COMPORTAMIENTO:
 - Mensajes cortos, máximo 4 líneas por respuesta.
 - Cuando tengas el spread y la comisión del cliente, recomienda la cuenta específica con números concretos.`;
 
+// ─── Debug endpoint (temporal) ───────────────────────────────────────────────
+app.get("/debug-env", (req, res) => {
+  const key = process.env.ANTHROPIC_API_KEY;
+  res.json({ defined: !!key, length: key ? key.length : 0, starts: key ? key.substring(0, 10) : "UNDEFINED" });
+});
+
 // ─── Chat endpoint (usado por el widget y por los webhooks) ───────────────────
 app.post("/api/chat", async (req, res) => {
   const { messages, platform = "Instagram" } = req.body;
