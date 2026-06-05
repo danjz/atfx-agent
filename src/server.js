@@ -43,7 +43,13 @@ INSTRUCCIONES DE COMPORTAMIENTO:
 // ─── Debug endpoint (temporal) ───────────────────────────────────────────────
 app.get("/debug-env", (req, res) => {
   const key = process.env.ANTHROPIC_API_KEY;
-  res.json({ defined: !!key, length: key ? key.length : 0, starts: key ? key.substring(0, 10) : "UNDEFINED" });
+  res.json({
+    ANTHROPIC_API_KEY: !!key,
+    PORT: process.env.PORT,
+    RAILWAY_SERVICE_NAME: process.env.RAILWAY_SERVICE_NAME,
+    RAILWAY_ENVIRONMENT: process.env.RAILWAY_ENVIRONMENT,
+    NODE_ENV: process.env.NODE_ENV
+  });
 });
 
 // ─── Chat endpoint (usado por el widget y por los webhooks) ───────────────────
