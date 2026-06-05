@@ -3,15 +3,15 @@ const express = require("express");
 const cors = require("cors");
 const Anthropic = require("@anthropic-ai/sdk");
 
-console.log("ANTHROPIC_API_KEY definida:", !!process.env.ANTHROPIC_API_KEY);
-console.log("Iniciando servidor...");
+const apiKey = process.env.CLAUDE_KEY || process.env.ANTHROPIC_API_KEY;
+console.log("API KEY definida:", !!apiKey);
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const client = new Anthropic({ apiKey });
 
 const SYSTEM_PROMPT = `Eres una desarrolladora de negocios de ATFX, un broker de CFD multiregulado. Hablas en primera persona, con un tono profesional pero cercano, como si chatearas por redes sociales. Tu objetivo es prospectar traders, academias de trading y influencers financieros para que operen con ATFX.
 
@@ -43,13 +43,11 @@ INSTRUCCIONES DE COMPORTAMIENTO:
 
 // ─── Debug endpoint (temporal) ───────────────────────────────────────────────
 app.get("/debug-env", (req, res) => {
-  const key = process.env.ANTHROPIC_API_KEY;
   res.json({
-    ANTHROPIC_API_KEY: !!key,
+    CLAUDE_KEY: !!process.env.CLAUDE_KEY,
+    ANTHROPIC_API_KEY: !!process.env.ANTHROPIC_API_KEY,
     PORT: process.env.PORT,
-    RAILWAY_SERVICE_NAME: process.env.RAILWAY_SERVICE_NAME,
-    RAILWAY_ENVIRONMENT: process.env.RAILWAY_ENVIRONMENT,
-    NODE_ENV: process.env.NODE_ENV
+    RAILWAY_SERVICE_NAME: process.env.RAILWAY_SERVICE_NAME
   });
 });
 
