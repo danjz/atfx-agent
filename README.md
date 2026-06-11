@@ -1,13 +1,12 @@
 # Agent Trader — Agente IA de Prospección para ATFX
 
-Agente conversacional impulsado por Claude (Anthropic) para prospectar traders, academias de trading e influencers financieros en nombre de ATFX, un bróker multi-regulado de CFDs y Forex.
+Agente conversacional  para prospectar traders, academias de trading e influencers financieros en nombre de ATFX, un bróker multi-regulado de CFDs y Forex.
 
 ---
 
 ## Stack tecnológico
 
 - **Backend:** Node.js + Express.js
-- **IA:** Claude Sonnet 4.6 vía Anthropic SDK
 - **Frontend:** HTML/CSS/JS vanilla (widget de chat embebido)
 - **Deploy:** Railway
 - **Integraciones:** Meta Webhooks (Instagram/Facebook), infraestructura para LinkedIn y WhatsApp
