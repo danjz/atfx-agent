@@ -1,4 +1,4 @@
-# Agent Trader — Agente IA de Prospección para ATFX
+# Agent Trader — Agente IA
 
 Agente conversacional  para prospectar traders, academias de trading e influencers financieros en nombre de ATFX, un bróker multi-regulado de CFDs y Forex.
 
